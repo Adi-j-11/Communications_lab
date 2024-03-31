@@ -4,8 +4,8 @@ t = 0:0.01:10;
 % Generate a sinusoidal signal
 a = sin(t);
 
-% Apply mu-law PCM and plot original and quantized signals
-[sqnr, aquan] = mula_pcm(a, 16, 255);
+% Apply mu-law PCM compression and uniform PCM quantization, and plot original and quantized signals
+[sqnr, aquan] = mula_pcm(a, 128, 255);
 display(sqnr);
 plot(a);
 hold on;
@@ -13,12 +13,12 @@ plot(aquan);
 legend('Original Signal', 'Quantized Signal');
 
 % Function to perform mu-law PCM compression followed by uniform PCM quantization
-function [sqnr, a_quan, code] = mula_pcm(a, n, mu)
+function [sqnr, a_quan] = mula_pcm(a, n, mu)
     % Apply mu-law compression to the input signal
     [y, maximum] = mulaw(a, mu);
     
     % Perform uniform PCM quantization on the compressed signal
-    [sqnr, y_q, code] = u_pcm(y, n);
+    [sqnr, y_q] = u_pcm(y, n);
     
     % Apply inverse mu-law compression to obtain the quantized signal
     a_quan = invmulaw(y_q, mu);
